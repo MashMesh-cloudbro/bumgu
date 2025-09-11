@@ -1,0 +1,28 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-envoy-monitor
+  # Prometheus가 설치된 네임스페이스나 istio-system에 생성
+  namespace: grafana
+  labels:
+    # ✔️ 중요 확인사항: 이 레이블이 Prometheus Operator가 발견하도록 설정한 값과 일치해야 합니다.
+    # 보통은 `release: prometheus` 또는 `release: kube-prometheus-stack` 입니다.
+    release: my-prometheus 
+    #release: my-prometheus-kube-prometh-prometheus
+spec:
+  # Istio가 설치된 모든 네임스페이스를 대상으로 합니다.
+  namespaceSelector:
+    any: true
+  selector:
+    # 'istio-prometheus-ignore' 레이블이 없는 모든 Service를 대상으로 합니다.
+    matchExpressions:
+    - {key: istio-prometheus-ignore, operator: DoesNotExist}
+  endpoints:
+  - port: http-monitoring # Istio가 Envoy의 메트릭을 노출하는 기본 포트 이름
+    interval: 15s
+    path: /stats/prometheus
+    # 아래 relabelings는 불필요한 메트릭을 필터링하여 Prometheus 부하를 줄여줍니다. (선택사항이지만 권장)
+    metricRelabelings:
+    - action: drop
+      regex: istio_request_param|istio_peer_id|istio_request_host|istio_response_flags
+      sourceLabels: [__name__]

@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-component-monitor
+  namespace: grafana
+  labels:
+    monitoring: istio-components
+    release: my-prometheus
+    #release: my-prometheus-kube-prometh-prometheus
+spec:
+  selector:
+    matchExpressions:
+      - {key: istio, operator: In, values: [controlplane, pilot]}
+  namespaceSelector:
+    matchNames:
+      - istio-system
+  endpoints:
+    - port: http-monitoring
+      interval: 15s
