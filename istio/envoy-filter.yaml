@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: enable-tcp-stats
+  namespace: istio-system
+spec:
+  workloadSelector: {} # Apply to all workloads
+  configPatches:
+  - applyTo: NETWORK_FILTER # "TCP_FILTER" -> "NETWORK_FILTER"
+    match:
+      context: SIDECAR_OUTBOUND
+      listener:
+        filterChain:
+          # This will match any TCP outbound filter chain that has the istio.stats filter.
+          filter:
+            name: "istio.stats"
+    patch:
+      operation: MERGE
+      value:
+        typed_config:
+          "@type": "type.googleapis.com/stats.PluginConfig"
+          tcp_reporter_enabled: true

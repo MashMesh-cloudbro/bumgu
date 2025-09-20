@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app
+  namespace: sample
+  labels:
+    app: sample-app
+spec:
+  ports:
+  # Istio가 HTTP 트래픽으로 명확히 인식하도록 포트 이름을 "http-"로 시작합니다.
+  - name: http-app
+    port: 80
+    targetPort: 8081
+  - name: http-envoy-prom
+    port: 15020
+    targetPort: 15020
+  selector:
+    app: sample-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-app
+  namespace: sample
+  labels:
+    app: sample-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: app
+        image: flrhyme9/sample-app-go
+        ports:
+        - containerPort: 8081

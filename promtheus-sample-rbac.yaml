@@ -1,0 +1,32 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prometheus-k8s-sample
+  namespace: sample # sample 네임스페이스에 대한 역할을 정의
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prometheus-k8s-sample
+  namespace: sample # sample 네임스페이스에 역할을 바인딩
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: prometheus-k8s-sample
+subjects:
+- kind: ServiceAccount
+  # ✔️ 중요: Prometheus Operator의 ServiceAccount 이름.
+  # 'grafana' 네임스페이스에서 확인된 이름으로 수정해야 할 수 있습니다.
+  name: my-prometheus-kube-prometh-operator
+  namespace: grafana

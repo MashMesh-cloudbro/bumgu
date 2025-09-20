@@ -1,0 +1,19 @@
+grafana:
+  enabled: false
+alertmanager:
+  enabled: false
+
+prometheus:
+  prometheusSpec:
+    podMonitorSelector:
+      matchLabels:
+        release: my-prometheus
+    podMonitorNamespaceSelector: {}
+    serviceMonitorSelector:
+      matchLabels:
+        release: my-prometheus
+    serviceMonitorNamespaceSelector: {}
+    ruleSelector:
+      matchLabels:
+        release: my-prometheus
+    ruleNamespaceSelector: {}

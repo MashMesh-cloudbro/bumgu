@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mysql-monitor
+  namespace: sample
+  labels:
+    app: mysql
+    release: my-prometheus
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  namespaceSelector:
+    matchNames:
+      - sample
+  endpoints:
+  - path: /stats/prometheus
+    targetPort: 15020
+    interval: 15s
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      targetLabel: pod_name

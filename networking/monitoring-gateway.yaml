@@ -1,0 +1,50 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: monitoring-gateway
+  namespace: grafana # 서비스들이 있는 네임스페이스에 생성
+spec:
+  selector:
+    istio: ingressgateway # Istio의 기본 인그레스 게이트웨이를 사용
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "grafana.example.com"
+    - "prometheus.example.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: grafana-vs
+  namespace: grafana
+spec:
+  hosts:
+  - "grafana.example.com" # 이 호스트 이름으로 요청이 오면
+  gateways:
+  - monitoring-gateway   # monitoring-gateway를 통과한 트래픽에 대해
+  http:
+  - route:
+    - destination:
+        host: my-grafana # my-grafana 서비스로 라우팅
+        port:
+          number: 80     # 해당 서비스의 80번 포트로
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: prometheus-vs
+  namespace: grafana
+spec:
+  hosts:
+  - "prometheus.example.com" # 이 호스트 이름으로 요청이 오면
+  gateways:
+  - monitoring-gateway      # monitoring-gateway를 통과한 트래픽에 대해
+  http:
+  - route:
+    - destination:
+        host: my-prometheus-kube-prometh-prometheus # Prometheus 서비스로 라우팅
+        port:
+          number: 9090 # 해당 서비스의 9090번 포트로

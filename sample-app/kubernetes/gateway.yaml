@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: sample-app-gateway
+  namespace: sample
+spec:
+  selector:
+    istio: ingressgateway # use Istio's default ingress gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: sample-app-vs
+  namespace: sample
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - sample-app-gateway
+  http:
+  - route:
+    - destination:
+        host: sample-app
+        port:
+          number: 80

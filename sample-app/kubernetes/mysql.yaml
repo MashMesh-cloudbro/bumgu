@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: sample
+  labels:
+    app: mysql
+spec:
+  ports:
+  # Istio가 TCP 트래픽으로 인식하도록 포트 이름을 "tcp-"로 시작합니다.
+  - name: tcp-mysql
+    port: 3306
+  - name: http-envoy-prom
+    port: 15020
+    targetPort: 15020
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: sample
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: asdf
+        - name: MYSQL_DATABASE
+          value: testdb
+        ports:
+        - containerPort: 3306
+          name: mysql-port
