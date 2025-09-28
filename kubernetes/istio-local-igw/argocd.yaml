@@ -11,6 +11,6 @@ spec:
     namespace: istio-gateway
   project: default
   source:
-    path: kubernetes/istio-local-igw/helm
+    path: istio-local-igw/helm
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main

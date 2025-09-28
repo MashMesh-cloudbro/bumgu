@@ -11,6 +11,6 @@ spec:
     namespace: observability
   project: default
   source:
-    path: kubernetes/minio/helm
+    path: minio/helm
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main

@@ -11,6 +11,6 @@ spec:
     namespace: argo
   project: default
   source:
-    path: ./kubernetes
+    path: ./
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main

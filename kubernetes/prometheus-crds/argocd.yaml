@@ -11,7 +11,7 @@ spec:
     namespace: observability
   project: default
   source:
-    path: kubernetes/prometheus-crds/helm
+    path: prometheus-crds/helm
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main
   syncPolicy:
