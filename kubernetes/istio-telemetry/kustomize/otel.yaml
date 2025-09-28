@@ -1,0 +1,31 @@
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: otel-tracing
+  namespace: otel-demo
+spec:
+  selector:
+  tracing:
+  - providers:
+    - name: otel
+    randomSamplingPercentage: 100
+    customTags:
+      "istio":
+        literal:
+          value: "debug"
+---
+apiVersion: telemetry.istio.io/v1
+kind: Telemetry
+metadata:
+  name: otel-tracing
+  namespace: istio-gateway
+spec:
+  selector:
+  tracing:
+  - providers:
+    - name: otel
+    randomSamplingPercentage: 100
+    customTags:
+      "istio":
+        literal:
+          value: "debug"          

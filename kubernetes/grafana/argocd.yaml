@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana
+  labels:
+    for: mash-mesh
+    type: observability
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  project: default
+  source:
+    path: kubernetes/grafana/helm
+    repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
+    targetRevision: main

@@ -1,0 +1,9 @@
+apiVersion: v2
+name: prometheus-operator-crds
+description: Umbrella Chart
+type: application
+version: 0.1.0
+dependencies:
+  - name: prometheus-operator-crds
+    version: "23.0.0"
+    repository: "https://prometheus-community.github.io/helm-charts"

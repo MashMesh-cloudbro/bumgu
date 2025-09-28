@@ -1,0 +1,11 @@
+istiod:
+  base:
+    enableIstioConfigCRDs: true
+  meshConfig:
+    accessLogFile: /dev/stdout
+    enableTracing: true
+    extensionProviders:
+    - name: otel
+      opentelemetry:
+        service: alloy-trace-loadbalancer.observability.svc.cluster.local
+        port: 4317

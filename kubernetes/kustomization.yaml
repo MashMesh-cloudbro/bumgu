@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argo
+
+resources:
+- app-of-apps.yaml
+- ./namespace/argocd.yaml
+- ./argo-cd/argocd.yaml
+- ./istio-base/argocd.yaml
+- ./istio-local-igw/argocd.yaml
+- ./istiod/argocd.yaml
+- ./istio-telemetry/argocd.yaml
+- ./minio/argocd.yaml
+- ./prometheus-crds/argocd.yaml
+- ./grafana/argocd.yaml
+- ./opentelemetry-demo/argocd.yaml

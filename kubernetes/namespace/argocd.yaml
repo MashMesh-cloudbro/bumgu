@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: namespace-for-mash-mesh
+  labels:
+    for: mash-mesh
+    type: namespace
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: kubernetes/namespace/kustomize
+    repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
+    targetRevision: main

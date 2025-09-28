@@ -1,0 +1,4 @@
+gateway:
+  kind: Deployment
+  service:
+    type: ClusterIP

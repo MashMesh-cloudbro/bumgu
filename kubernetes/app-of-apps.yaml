@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mash-mesh-root
+  labels:
+    for: mash-mesh
+    type: app-of-apps
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  project: default
+  source:
+    path: ./kubernetes
+    repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
+    targetRevision: main

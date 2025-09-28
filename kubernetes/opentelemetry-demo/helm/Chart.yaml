@@ -1,0 +1,9 @@
+apiVersion: v2
+name: opentelemetry-demo
+description: Umbrella Chart
+type: application
+version: 0.1.0
+dependencies:
+  - name: opentelemetry-demo
+    version: "0.37.7"
+    repository: "https://open-telemetry.github.io/opentelemetry-helm-charts"

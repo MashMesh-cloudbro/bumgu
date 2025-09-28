@@ -1,0 +1,165 @@
+minio:
+  ## minio mode, i.e. standalone or distributed
+  mode: distributed ## other supported values are "standalone"
+
+  ## Pod runtime class name
+  ## ref https://kubernetes.io/docs/concepts/containers/runtime-class/
+  ##
+  runtimeClassName: ""
+
+  ## Set default rootUser, rootPassword
+  ## rootUser and rootPassword is generated when not set
+  ## Distributed MinIO ref: https://min.io/docs/minio/linux/operations/install-deploy-manage/deploy-minio-multi-node-multi-drive.html
+  ##
+  rootUser: ""
+  rootPassword: ""
+
+  ## Use existing Secret that store following variables:
+  ##
+  ## | Chart var             | .data.<key> in Secret    |
+  ## |:----------------------|:-------------------------|
+  ## | rootUser              | rootUser                 |
+  ## | rootPassword          | rootPassword             |
+  ##
+  ## All mentioned variables will be ignored in values file.
+  ## .data.rootUser and .data.rootPassword are mandatory,
+  ## others depend on enabled status of corresponding sections.
+  existingSecret: ""
+
+  ## Directory on the MinIO pof
+  certsPath: "/etc/minio/certs/"
+  configPathmc: "/etc/minio/mc/"
+
+  ## Path where PV would be mounted on the MinIO Pod
+  mountPath: "/export"
+  ## Override the root directory which the minio server should serve from.
+  ## If left empty, it defaults to the value of {{ .Values.mountPath }}
+  ## If defined, it must be a sub-directory of the path specified in {{ .Values.mountPath }}
+  ##
+  bucketRoot: ""
+
+  # Number of drives attached to a node
+  drivesPerNode: 1
+  # Number of MinIO containers running
+  replicas: 3
+  # Number of expanded MinIO clusters
+  pools: 1
+
+  ## TLS Settings for MinIO
+  tls:
+    enabled: false
+    ## Create a secret with private.key and public.crt files and pass that here. Ref: https://github.com/minio/minio/tree/master/docs/tls/kubernetes#2-create-kubernetes-secret
+    certSecret: ""
+    publicCrt: public.crt
+    privateKey: private.key
+
+  ## Trusted Certificates Settings for MinIO. Ref: https://min.io/docs/minio/linux/operations/network-encryption.html#third-party-certificate-authorities
+  ## Bundle multiple trusted certificates into one secret and pass that here. Ref: https://github.com/minio/minio/tree/master/docs/tls/kubernetes#2-create-kubernetes-secret
+  ## When using self-signed certificates, remember to include MinIO's own certificate in the bundle with key public.crt.
+  ## If certSecret is left empty and tls is enabled, this chart installs the public certificate from .Values.tls.certSecret.
+  trustedCertsSecret: ""
+
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    enabled: true
+    annotations: {}
+
+    ## A manually managed Persistent Volume and Claim
+    ## Requires persistence.enabled: true
+    ## If defined, PVC must be created manually before volume will be bound
+    existingClaim: ""
+
+    ## minio data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    ## Storage class of PV to bind. By default it looks for standard storage class.
+    ## If the PV uses a different storage class, specify that here.
+    storageClass: ""
+    volumeName: ""
+    accessMode: ReadWriteOnce
+    size: 5Gi
+
+  ## Expose the MinIO service to be accessed from outside the cluster (LoadBalancer service).
+  ## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
+  ## ref: http://kubernetes.io/docs/user-guide/services/
+  ##
+  service:
+    type: ClusterIP
+    clusterIP: ~
+    port: "9000"
+    nodePort: 32000
+    loadBalancerIP: ~
+    externalIPs: []
+    annotations: {}
+
+    ## service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    #loadBalancerSourceRanges:
+    #   - 10.10.10.0/24
+    loadBalancerSourceRanges: []
+
+    ## service.externalTrafficPolicy minio service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+
+  consoleService:
+    type: ClusterIP
+    clusterIP: ~
+    port: "9001"
+    # nodePort: 32001
+    loadBalancerIP: ~
+    externalIPs: []
+    annotations: {}
+    ## consoleService.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ##
+    #loadBalancerSourceRanges:
+    #   - 10.10.10.0/24
+    loadBalancerSourceRanges: []
+
+    ## servconsoleServiceice.externalTrafficPolicy minio service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    # externalTrafficPolicy: Cluster
+    externalTrafficPolicy: Local
+
+  ## Configure resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ##
+  resources:
+    requests:
+      # memory: 1Gi
+      memory: 128Mi
+
+  ## List of users to be created after minio install
+  ##
+  users:
+    ## Username, password and policy to be assigned to the user
+    ## Default policies are [readonly|readwrite|writeonly|consoleAdmin|diagnostics]
+    ## Add new policies as explained here https://min.io/docs/minio/kubernetes/upstream/administration/identity-access-management.html#access-management
+    ## NOTE: this will fail if LDAP is enabled in your MinIO deployment
+    ## make sure to disable this if you are using LDAP.
+    - accessKey: localhost
+      secretKey: localhost
+      policy: consoleAdmin
+    # Or you can refer to specific secret
+    #- accessKey: externalSecret
+    #  existingSecret: my-secret
+    #  existingSecretKey: password
+    #  policy: readonly
+
+  ## Specify the service account to use for the MinIO pods. If 'create' is set to 'false'
+  ## and 'name' is left unspecified, the account 'default' will be used.
+  serviceAccount:
+    create: true
+    ## The name of the service account to use. If 'create' is 'true', a service account with that name
+    ## will be created.
+    name: "minio-sa"

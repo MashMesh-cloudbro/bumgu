@@ -1,0 +1,17 @@
+argo-cd:
+  controller:
+    replicas: 1
+  redis-ha:
+    enabled: false
+  server:
+    replicas: 1
+    ingress:
+      enabled: false
+    autoscaling:
+      enabled: false
+  repoServer:
+    replicas: 1
+    autoscaling:
+      enabled: false
+  applicationSet:
+    replicas: 1

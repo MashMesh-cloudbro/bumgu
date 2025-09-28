@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-crds
+  labels:
+    for: mash-mesh
+    type: observability
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  project: default
+  source:
+    path: kubernetes/prometheus-crds/helm
+    repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
+    targetRevision: main
+  syncPolicy:
+    syncOptions:
+    - ServerSideApply=true

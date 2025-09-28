@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opentelemetry-demo-workloads
+  labels:
+    for: mash-mesh
+    type: otel-demo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: otel-demo
+  project: default
+  source:
+    path: kubernetes/opentelemetry-demo/helm
+    repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
+    targetRevision: main

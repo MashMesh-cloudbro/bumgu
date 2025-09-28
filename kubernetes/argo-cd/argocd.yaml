@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  labels:
+    for: mash-mesh
+    type: argo
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo
+  project: default
+  source:
+    path: kubernetes/argo-cd/helm
+    repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
+    targetRevision: main
+    helm:
+      releaseName: argocd
