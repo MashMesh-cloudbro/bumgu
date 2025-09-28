@@ -10,6 +10,6 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: namespace/kustomize
+    path: kubernetes/namespace/kustomize
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main

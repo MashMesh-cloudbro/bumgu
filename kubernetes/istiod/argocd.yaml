@@ -11,6 +11,6 @@ spec:
     namespace: istio-system
   project: default
   source:
-    path: istiod/helm
+    path: kubernetes/istiod/helm
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main

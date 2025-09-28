@@ -11,6 +11,6 @@ spec:
     namespace: otel-demo
   project: default
   source:
-    path: opentelemetry-demo/helm
+    path: kubernetes/opentelemetry-demo/helm
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main

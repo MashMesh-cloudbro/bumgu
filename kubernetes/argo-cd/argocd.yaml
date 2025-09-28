@@ -11,7 +11,7 @@ spec:
     namespace: argo
   project: default
   source:
-    path: argo-cd/helm
+    path: kubernetes/argo-cd/helm
     repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
     targetRevision: main
     helm:
