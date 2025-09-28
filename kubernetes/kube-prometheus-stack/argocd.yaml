@@ -22,3 +22,8 @@ spec:
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
+      - Validate=false
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+      - ApplyOutOfSyncOnly=true

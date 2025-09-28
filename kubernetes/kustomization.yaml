@@ -11,6 +11,7 @@ resources:
 - ./istio-local-igw/argocd.yaml
 - ./istiod/argocd.yaml
 - ./istio-telemetry/argocd.yaml
+- ./istio-cni/argocd.yaml
 - ./minio/argocd.yaml
 - ./prometheus-crds/argocd.yaml
 - ./grafana/argocd.yaml

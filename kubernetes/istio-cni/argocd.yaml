@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-cni
+  labels:
+    for: mash-mesh
+    type: istio
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: istio-system
+  project: default
+  source:
+    path: kubernetes/istio-cni/helm
+    repoURL: https://github.com/MashMesh-cloudbro/bumgu.git
+    targetRevision: main
